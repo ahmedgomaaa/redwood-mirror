@@ -10,6 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - run: npm ci --ignore-scripts
+      - run: npm run verify:fidelity
       - run: npx playwright install --with-deps chromium
       - run: npm test
       - run: npm run test:load

@@ -2,6 +2,22 @@
 
 Verified locally on 7 October 2026 with Node 24.19.0 and automated Microsoft Edge browser tests on Windows. This is a tested release candidate, not a guarantee of zero bugs or cheating.
 
+## Detailed-handoff revision verification
+
+- Re-ran the complete `npm test` successfully after adding the handoff and fidelity tooling. Existing
+  server/lib/public gameplay and art are unchanged from baseline bc84bb8c2a96c003fca89cc4297cf3541d27b6ca.
+- `npm run verify:fidelity`: all 42 protected files matched. The generated source release also passed.
+  Negative tests reject modified text, changed/missing binary assets, traversal and duplicate entries;
+  LF/CRLF-only text differences are permitted for cross-platform git checkouts.
+- Re-ran `npm run test:load`: 100 progressing streams, health p95 32 ms, 1,755 received frames,
+  approximately 47.1 MB received locally. This supplements, not upgrades, the hosting guarantee.
+- `npm run check:release`, `git diff --check`, production dependency audit and local documentation
+  link checks passed. Source-only package includes all three guides, fidelity manifest, original assets
+  and tests; private live event data was not included or changed.
+- Microsoft/company SSO is a requested, detailed integration contract in MICROSOFT_SSO.md,
+  **not implemented or tested authentication in this baseline**. Tenant/app/admin IDs, private
+  credentials and real two-account testing remain required. Current build still uses private host key.
+
 ## Passed
 
 - Clarity revision: mission explained as asking JobS questions and training a smaller AI from its answers; teacher/student explicitly defined as model roles. Dashboard and phone HUD use Your AI progress / Your AI; the walkthrough explains simulated learning rather than stealing model files. Revised novel and normal-zoom layouts rechecked.

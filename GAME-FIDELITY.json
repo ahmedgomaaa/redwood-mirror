@@ -1,0 +1,304 @@
+{
+  "version": 1,
+  "baselineCommit": "bc84bb8c2a96c003fca89cc4297cf3541d27b6ca",
+  "description": "Original gameplay/art plus handoff fidelity tooling. Text accepts LF/CRLF only; binary is byte-exact. Do not refresh to hide edits.",
+  "files": [
+    {
+      "path": ".dockerignore",
+      "kind": "text",
+      "bytes": 94,
+      "sha256": "0fc95d2b03b965f6241b9bd266bcd408e9e3746e1fa2069dfee2572f61998ac1",
+      "lfSha256": "0fc95d2b03b965f6241b9bd266bcd408e9e3746e1fa2069dfee2572f61998ac1"
+    },
+    {
+      "path": ".env.example",
+      "kind": "text",
+      "bytes": 475,
+      "sha256": "40d5c96e3637ba664cb1ee7ff5c2ac73af99219b3d997dba0e1052e93719e8a2",
+      "lfSha256": "40d5c96e3637ba664cb1ee7ff5c2ac73af99219b3d997dba0e1052e93719e8a2"
+    },
+    {
+      "path": ".github/workflows/test.yml",
+      "kind": "text",
+      "bytes": 453,
+      "sha256": "7b40eb8c0a49c3c0cdde19543a4419beba53742ab15a601ffca628ae5a02667b",
+      "lfSha256": "7b40eb8c0a49c3c0cdde19543a4419beba53742ab15a601ffca628ae5a02667b"
+    },
+    {
+      "path": ".gitignore",
+      "kind": "text",
+      "bytes": 119,
+      "sha256": "b3ed45cbb2562f2b5998fc69bc52cf067b9ef676cb338824bc25d1ee151bf5ab",
+      "lfSha256": "b3ed45cbb2562f2b5998fc69bc52cf067b9ef676cb338824bc25d1ee151bf5ab"
+    },
+    {
+      "path": "Dockerfile",
+      "kind": "text",
+      "bytes": 571,
+      "sha256": "024d2a60f706dfaa0d44e26d4ae0bf181eaaf1a522b3a9c87f9c6a372ace2143",
+      "lfSha256": "024d2a60f706dfaa0d44e26d4ae0bf181eaaf1a522b3a9c87f9c6a372ace2143"
+    },
+    {
+      "path": "compose.yaml",
+      "kind": "text",
+      "bytes": 748,
+      "sha256": "f942a2b5b71e147e25dc63718b9ada0f010258fef17f66a205fe7bedef39002e",
+      "lfSha256": "f942a2b5b71e147e25dc63718b9ada0f010258fef17f66a205fe7bedef39002e"
+    },
+    {
+      "path": "deploy/nginx.conf.example",
+      "kind": "text",
+      "bytes": 498,
+      "sha256": "99bb7be36a884c6be62b7567253939baae369dfd216a2b0f3dd7b908ec177317",
+      "lfSha256": "99bb7be36a884c6be62b7567253939baae369dfd216a2b0f3dd7b908ec177317"
+    },
+    {
+      "path": "lib/config.mjs",
+      "kind": "text",
+      "bytes": 1478,
+      "sha256": "c04cdfeaf5734b980c158a2ed62a209a1e5e2011364bd7e77cf4287572cf9d08",
+      "lfSha256": "c04cdfeaf5734b980c158a2ed62a209a1e5e2011364bd7e77cf4287572cf9d08"
+    },
+    {
+      "path": "lib/security.mjs",
+      "kind": "text",
+      "bytes": 1250,
+      "sha256": "9b55a0b18c8ba21d215293942fb0f471afcf5acc9aa8308335b9b7bec5f2cf68",
+      "lfSha256": "9b55a0b18c8ba21d215293942fb0f471afcf5acc9aa8308335b9b7bec5f2cf68"
+    },
+    {
+      "path": "lib/storage.mjs",
+      "kind": "text",
+      "bytes": 2817,
+      "sha256": "bee858aca2abae495381172513489833b04ca8300a7c6485d28a8e8f3ecc945b",
+      "lfSha256": "bee858aca2abae495381172513489833b04ca8300a7c6485d28a8e8f3ecc945b"
+    },
+    {
+      "path": "package-lock.json",
+      "kind": "text",
+      "bytes": 1248,
+      "sha256": "e0cb2d559063f8b128dea69eab6c956263e07345cf68651f72246d792b3fbfb0",
+      "lfSha256": "e0cb2d559063f8b128dea69eab6c956263e07345cf68651f72246d792b3fbfb0"
+    },
+    {
+      "path": "package.json",
+      "kind": "text",
+      "bytes": 949,
+      "sha256": "15c58acca21e142933336a2818de324e6a3aa277433ce1cea2e7b9fbccbe04a9",
+      "lfSha256": "15c58acca21e142933336a2818de324e6a3aa277433ce1cea2e7b9fbccbe04a9"
+    },
+    {
+      "path": "public/admin.html",
+      "kind": "text",
+      "bytes": 316,
+      "sha256": "5ba9c58bbc6b14437cae1c21b5fff403bdca311175ca81b94e3054dcb83790b0",
+      "lfSha256": "5ba9c58bbc6b14437cae1c21b5fff403bdca311175ca81b94e3054dcb83790b0"
+    },
+    {
+      "path": "public/client.js",
+      "kind": "text",
+      "bytes": 40095,
+      "sha256": "3c4e802e76e4dad77713a1373451d16d2aa5de225e447040278e6b57fd97368c",
+      "lfSha256": "234ab91624954550f2dc4b120f5af38b96d5b710376e040e419badfc8c09ec49"
+    },
+    {
+      "path": "public/display.html",
+      "kind": "text",
+      "bytes": 328,
+      "sha256": "f921a99924a5aa83ea48aa625268895a62f68354bb8b39c76b827d2c2327f4c3",
+      "lfSha256": "f921a99924a5aa83ea48aa625268895a62f68354bb8b39c76b827d2c2327f4c3"
+    },
+    {
+      "path": "public/game-rules.js",
+      "kind": "text",
+      "bytes": 1141,
+      "sha256": "09ae0cc9eabea966c6293863a3cd1ecc9998051e79ec5f1d65b328d3477c6a02",
+      "lfSha256": "09ae0cc9eabea966c6293863a3cd1ecc9998051e79ec5f1d65b328d3477c6a02"
+    },
+    {
+      "path": "public/index.html",
+      "kind": "text",
+      "bytes": 976,
+      "sha256": "bcd84fcb580bb8c0c47271db09960d7d27b926055df636ae481136ff2d51d203",
+      "lfSha256": "bcd84fcb580bb8c0c47271db09960d7d27b926055df636ae481136ff2d51d203"
+    },
+    {
+      "path": "public/intro-client.js",
+      "kind": "text",
+      "bytes": 2845,
+      "sha256": "f4bb8dc75a068e4d96795f17f89be0298f1e51963b678aa0625e9d3456d3ca3c",
+      "lfSha256": "f4bb8dc75a068e4d96795f17f89be0298f1e51963b678aa0625e9d3456d3ca3c"
+    },
+    {
+      "path": "public/intro.html",
+      "kind": "text",
+      "bytes": 1331,
+      "sha256": "9022c028c2018cd90bfe46af6fa17b22c4b928cbeab3c33e9ec9efaba1737709",
+      "lfSha256": "9022c028c2018cd90bfe46af6fa17b22c4b928cbeab3c33e9ec9efaba1737709"
+    },
+    {
+      "path": "public/player.html",
+      "kind": "text",
+      "bytes": 319,
+      "sha256": "24e9179c49deae054d2a60f2da1cf0aaab9c4e284bdd729d587ad7f7d257c07d",
+      "lfSha256": "24e9179c49deae054d2a60f2da1cf0aaab9c4e284bdd729d587ad7f7d257c07d"
+    },
+    {
+      "path": "public/story-atlas.png",
+      "kind": "binary",
+      "bytes": 2362453,
+      "sha256": "cba30c22737a8a2969537a3a4240a508c5071d61ac926fc14cc52f7d0110676f",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "path": "public/story.js",
+      "kind": "text",
+      "bytes": 7692,
+      "sha256": "8649949eff6d6a85d256a25b2440910a7100d6c405a9f81159aa3dcae2f4add3",
+      "lfSha256": "8649949eff6d6a85d256a25b2440910a7100d6c405a9f81159aa3dcae2f4add3"
+    },
+    {
+      "path": "public/styles.css",
+      "kind": "text",
+      "bytes": 38819,
+      "sha256": "1cfc95e162e01114aeb0a1464f42cfc5d27748fa123fa78c0c9375d0e0d356f4",
+      "lfSha256": "1cfc95e162e01114aeb0a1464f42cfc5d27748fa123fa78c0c9375d0e0d356f4"
+    },
+    {
+      "path": "public/vn-crew.png",
+      "kind": "binary",
+      "bytes": 1901711,
+      "sha256": "b6f5d194a2d059eb81b657450bd3204a9d8cbe8532d145310d7ca8f86c3da112",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "path": "public/vn-room.png",
+      "kind": "binary",
+      "bytes": 2349578,
+      "sha256": "c4dbafc931f78f57e276c0b981833552ccd4a6861873ec2c07663ff87ebf6fae",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "path": "scripts/backup.mjs",
+      "kind": "text",
+      "bytes": 688,
+      "sha256": "352ceb3a519773210122f066f1988d3c5f4e4574427cbf170c6224806b397a95",
+      "lfSha256": "352ceb3a519773210122f066f1988d3c5f4e4574427cbf170c6224806b397a95"
+    },
+    {
+      "path": "scripts/check-release.mjs",
+      "kind": "text",
+      "bytes": 1113,
+      "sha256": "2ac8d45ecec6f50505dc0568a82767283affad7b132c1e4a2f8dd62c767d06cd",
+      "lfSha256": "2ac8d45ecec6f50505dc0568a82767283affad7b132c1e4a2f8dd62c767d06cd"
+    },
+    {
+      "path": "scripts/package-release.mjs",
+      "kind": "text",
+      "bytes": 1355,
+      "sha256": "a18323d7790923ab29d49b384c125abf3770e65964470b5bbc42a514d44b627b",
+      "lfSha256": "a18323d7790923ab29d49b384c125abf3770e65964470b5bbc42a514d44b627b"
+    },
+    {
+      "path": "scripts/verify-fidelity.mjs",
+      "kind": "text",
+      "bytes": 2294,
+      "sha256": "1643a18950014bf74daa371c8fa7af4c5e45773018f22f6937bb904453a4067b",
+      "lfSha256": "1643a18950014bf74daa371c8fa7af4c5e45773018f22f6937bb904453a4067b"
+    },
+    {
+      "path": "server.mjs",
+      "kind": "text",
+      "bytes": 27769,
+      "sha256": "d42335c59708ae49a117331a7fca192826ee6662c35f3ef7eddabcdad6a0a846",
+      "lfSha256": "d42335c59708ae49a117331a7fca192826ee6662c35f3ef7eddabcdad6a0a846"
+    },
+    {
+      "path": "test-story.mjs",
+      "kind": "text",
+      "bytes": 5227,
+      "sha256": "07c141143bf380f0e0333bda37a95414ba5c8fb195f2bbd1995163ed655237b7",
+      "lfSha256": "07c141143bf380f0e0333bda37a95414ba5c8fb195f2bbd1995163ed655237b7"
+    },
+    {
+      "path": "test.mjs",
+      "kind": "text",
+      "bytes": 11752,
+      "sha256": "3dd9e3a11c813f2e7e5197d7a69acb6014553c637ad202162013a438e30a068b",
+      "lfSha256": "3dd9e3a11c813f2e7e5197d7a69acb6014553c637ad202162013a438e30a068b"
+    },
+    {
+      "path": "tests/backup.mjs",
+      "kind": "text",
+      "bytes": 1546,
+      "sha256": "992a339bc2ad7e5eca4a838b6147f93c23c4f1fe9ae809a2d6d02d924d29a0db",
+      "lfSha256": "992a339bc2ad7e5eca4a838b6147f93c23c4f1fe9ae809a2d6d02d924d29a0db"
+    },
+    {
+      "path": "tests/crash.mjs",
+      "kind": "text",
+      "bytes": 1634,
+      "sha256": "23e0d9e92c755264776668db46a491a96e24f7462dd5914b66fd842317f9ff59",
+      "lfSha256": "23e0d9e92c755264776668db46a491a96e24f7462dd5914b66fd842317f9ff59"
+    },
+    {
+      "path": "tests/failure.mjs",
+      "kind": "text",
+      "bytes": 1910,
+      "sha256": "84312a3c905b3e4db305b2cad2f98b1f5d75f829a2d0aa103aac84bfe0b3bc35",
+      "lfSha256": "84312a3c905b3e4db305b2cad2f98b1f5d75f829a2d0aa103aac84bfe0b3bc35"
+    },
+    {
+      "path": "tests/fidelity.mjs",
+      "kind": "text",
+      "bytes": 2144,
+      "sha256": "f5e1aafa9b2d178e0ca238cc194dec6a11344126b2c9ba422b828432f7d8a71f",
+      "lfSha256": "f5e1aafa9b2d178e0ca238cc194dec6a11344126b2c9ba422b828432f7d8a71f"
+    },
+    {
+      "path": "tests/helpers.mjs",
+      "kind": "text",
+      "bytes": 1952,
+      "sha256": "23e99d4381a116b129d5c5b98dc9da5e041743ed3a57482d20ce89927271e569",
+      "lfSha256": "23e99d4381a116b129d5c5b98dc9da5e041743ed3a57482d20ce89927271e569"
+    },
+    {
+      "path": "tests/load.mjs",
+      "kind": "text",
+      "bytes": 1975,
+      "sha256": "3d0dc207b482ee435aa2349ac9088f6bf5524b29d3f7936a07076dc278924928",
+      "lfSha256": "3d0dc207b482ee435aa2349ac9088f6bf5524b29d3f7936a07076dc278924928"
+    },
+    {
+      "path": "tests/production.mjs",
+      "kind": "text",
+      "bytes": 1599,
+      "sha256": "33453ea5ae55789cb4fc69919a0413e140d73fb724c156fa37227f96496faaad",
+      "lfSha256": "33453ea5ae55789cb4fc69919a0413e140d73fb724c156fa37227f96496faaad"
+    },
+    {
+      "path": "tests/security.mjs",
+      "kind": "text",
+      "bytes": 5552,
+      "sha256": "65e9cadbb39495a7fd6fa0c722b4f41ff9bdb0febf6ff9775ac30fdff94c37cd",
+      "lfSha256": "65e9cadbb39495a7fd6fa0c722b4f41ff9bdb0febf6ff9775ac30fdff94c37cd"
+    },
+    {
+      "path": "tests/unit.mjs",
+      "kind": "text",
+      "bytes": 1950,
+      "sha256": "b7d142cc6244ad82e807bf029fe652ae8d7b532a9e1a736e1d016466f1733faf",
+      "lfSha256": "b7d142cc6244ad82e807bf029fe652ae8d7b532a9e1a736e1d016466f1733faf"
+    },
+    {
+      "path": "tests/viewport.mjs",
+      "kind": "text",
+      "bytes": 4271,
+      "sha256": "78b052a2a94d916d462e69a0380b1474d8f023c15d1e2a07cf538e9ad5963827",
+      "lfSha256": "78b052a2a94d916d462e69a0380b1474d8f023c15d1e2a07cf538e9ad5963827"
+    }
+  ]
+}

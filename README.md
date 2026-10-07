@@ -115,9 +115,15 @@ The load test exercises 100 concurrent live streams, not 100 real phones on a pr
 Read [DEPLOYMENT.md](DEPLOYMENT.md) for deployment choices and operational checks.
 Give the other model [MODEL_HANDOFF.md](MODEL_HANDOFF.md) and require it to follow the numbered
 instructions without rewriting the app. [SECURITY.md](SECURITY.md) states protections and limitations.
+The full behavior/design/timer/API contract is [GAME_SPEC.md](GAME_SPEC.md). Original code/assets
+are protected by [GAME-FIDELITY.json](GAME-FIDELITY.json); run `npm run verify:fidelity` before edits.
+The requested Microsoft/company SSO integration is specified in [MICROSOFT_SSO.md](MICROSOFT_SSO.md)
+but **not yet implemented**: the baseline still uses a private host key. Its final integration must bind
+Ahmed's verified company tenant/user object IDs to admin, not trust an email string. Other identities
+remain players. Entra inputs and real-account tests are required before calling SSO complete.
 See [TEST-REPORT.md](TEST-REPORT.md) for the actual verified checks and remaining deployment gates.
 
 GitHub Pages is not suitable: this app requires a long-running Node server, SSE and a writable disk.
-This project is prepared for public source upload, but does not automatically create or push a repo.
+Public repository: https://github.com/ahmedgomaaa/redwood-mirror . Publishing source is not deployment.
 There is no license grant inferred from publishing: obtain the owner's chosen license before adding one.
 Original generated anime artwork and its generation prompts are documented in [ART-PROMPTS.md](ART-PROMPTS.md).

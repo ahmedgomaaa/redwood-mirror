@@ -1,5 +1,10 @@
 # Deployment runbook
 
+**Authentication status:** these commands describe the existing private-host-key baseline.
+For the owner's requested final Microsoft/company SSO deployment, follow [MICROSOFT_SSO.md](MICROSOFT_SSO.md)
+and [MODEL_HANDOFF.md](MODEL_HANDOFF.md). SSO is not implemented here yet. New SSO config alone
+does not change server authorization; do not expose this as email-login-ready.
+
 Use a long-running **Node.js 24** service with a persistent **local** volume, exactly one replica,
 and an HTTPS reverse proxy or managed HTTPS ingress. The app has no runtime npm dependencies.
 Do not deploy to GitHub Pages or a static-only/serverless-function service. Do not add real AI keys.
