@@ -1,0 +1,16 @@
+name: Verify game
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: node:24-bookworm
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - run: npm ci --ignore-scripts
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+      - run: npm run test:load
+      - run: npm run check:release

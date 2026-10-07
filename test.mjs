@@ -1,0 +1,80 @@
+import {spawn} from 'node:child_process';
+import {chromium} from 'playwright';
+import {temporaryData,browserOptions} from './tests/helpers.mjs';
+import assert from 'node:assert/strict';
+
+const child=spawn(process.execPath,['server.mjs'],{cwd:new URL('.',import.meta.url),env:{...process.env,PORT:'4174',DATA_DIR:temporaryData(),NODE_ENV:'development',REQUIRE_INVITES:'false'},stdio:['ignore','pipe','pipe']});
+let output='',browser;const streamController=new AbortController();let streamReader;
+const ready=new Promise((resolve,reject)=>{child.stdout.on('data',chunk=>{output+=chunk;const match=output.match(/Admin: (http[^\r\n]+)/);if(match)resolve(match[1]);});child.on('error',reject);child.on('exit',code=>{if(code)reject(new Error('server exited '+code));});});
+const url='http://localhost:4174';
+const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+async function get(){return (await fetch(url+'/api/state')).json();}
+async function post(endpoint,body,token){const r=await fetch(url+endpoint,{method:'POST',headers:{'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{})},body:JSON.stringify(body)});return {status:r.status,body:await r.json()};}
+try{
+const adminUrl=await Promise.race([ready,wait(5000).then(()=>{throw Error('server startup timed out');})]);const key=adminUrl.split('#')[1];
+assert.equal((await post('/api/admin',{action:'start'})).status,401);
+const joined=await post('/api/join',{name:'Ahmed',room:'MIRROR'});assert.equal(joined.status,200);const token=joined.body.token;
+const stream=await fetch(url+'/api/events?view=player',{headers:{Authorization:'Bearer '+token},signal:streamController.signal});streamReader=stream.body.getReader();(async()=>{try{while(!(await streamReader.read()).done){}}catch{}})();
+const other=await post('/api/join',{name:'Independent',room:'MIRROR'});assert.equal(other.status,200);
+await post('/api/admin',{action:'introStart'},key);
+assert.equal((await get()).intro.scene,0);
+assert.equal((await post('/api/player',{extracting:true},token)).status,409);
+assert.equal((await post('/api/admin',{action:'start'},key)).status,409);
+assert.equal((await post('/api/admin',{action:'introNext'},token)).status,401);
+assert.equal((await post('/api/admin',{action:'beginOperation'},key)).status,409);
+const introClock=(await get()).remaining;await wait(600);assert.equal((await get()).remaining,introClock);
+for(let i=0;i<4;i++)await post('/api/admin',{action:'introNext'},key);
+assert.equal((await get()).intro.scene,4);await post('/api/admin',{action:'introBack'},key);assert.equal((await get()).intro.scene,3);
+await post('/api/admin',{action:'introNext'},key);await post('/api/admin',{action:'beginOperation'},key);assert.equal((await get()).intro.active,false);assert.equal((await get()).status,'running');
+await post('/api/admin',{action:'reset'},key);
+assert.equal((await post('/api/admin',{action:'next'},token)).status,401,'player must not control levels');
+assert.equal((await post('/api/player',{speed:10,extracting:true},'wrong')).status,401);
+assert.equal((await post('/api/player',{variety:20},token)).status,403,'locked slider cannot be spoofed');
+assert.equal((await post('/api/player',{speed:10,extracting:true},token)).status,200);
+await post('/api/admin',{action:'settings',duration:15},key);await post('/api/admin',{action:'start'},key);await wait(900);
+let s=await get();assert(s.players[0].queries>0);assert.equal(s.players[0].suspicion,0,'level 1 has no detection');
+await post('/api/admin',{action:'pause'},key);const before=await get();await wait(650);const after=await get();assert.equal(before.remaining,after.remaining);assert.equal(before.players[0].queries,after.players[0].queries);
+await post('/api/admin',{action:'next'},key);s=await get();assert.equal(s.level,1);assert.equal(s.status,'paused');assert(s.players[0].bank>0);
+assert.equal(s.players[0].extracting,false,'new level disarms extraction');
+const protectedPlayer=s.players[0];await post('/api/admin',{action:'start'},key);await wait(700);const protectedAfter=(await get()).players[0];
+assert.equal(protectedAfter.queries,protectedPlayer.queries,'unanswered player sends no requests even if host starts');assert.equal(protectedAfter.suspicion,0);assert.equal(protectedAfter.quality,protectedPlayer.quality);assert.equal(protectedAfter.points,0);
+assert.equal((await post('/api/player',{extracting:true},token)).status,409,'unanswered player cannot bypass extraction gate');
+await post('/api/admin',{action:'pause'},key);
+for(let i=0;i<4;i++)await post('/api/admin',{action:'move',id:joined.body.id,direction:'forward'},key);
+const preAnswer=(await get()).players[0];const wrong=await post('/api/answer',{level:1,option:0},token);assert.equal(wrong.status,200);assert.equal(wrong.body.correct,false);
+let answerState=await get();assert.equal(answerState.players[0].points,-5);assert(Math.abs(answerState.players[0].quality-(preAnswer.quality-3))<.001);assert.equal(answerState.players[1].points,0);assert.deepEqual(answerState.players[1].solved,[],'one player does not unlock another');
+assert.equal((await post('/api/answer',{level:1,option:1},token)).status,429,'retry cooldown is enforced');
+await wait(2100);assert.equal((await post('/api/answer',{level:1,option:1},token)).body.correct,true);
+assert.equal((await post('/api/answer',{level:1,option:1},token)).status,409,'correct answer cannot be replayed for points');
+answerState=await get();assert.deepEqual(answerState.players[0].solved,[1]);assert.equal(answerState.players[0].points,5);assert.equal(answerState.players[0].spacing,50);assert.equal(answerState.players[0].extracting,false,'correct answer leaves time to retune before manually resuming');
+assert.equal((await post('/api/player',{extracting:true},token)).status,409,'new slider must be explicitly confirmed');
+assert.equal((await post('/api/player',{spacing:0,confirmTune:'spacing',extracting:true},token)).status,409,'cannot confirm and resume in the same request');
+assert.equal((await post('/api/player',{spacing:0,confirmTune:'spacing'},token)).status,200);
+await post('/api/player',{extracting:true},token);
+await post('/api/admin',{action:'start'},key);
+let previous=(await get()).players[0],warningLoss=false,caughtLoss=false;
+for(let i=0;i<15;i++){await wait(200);const current=(await get()).players[0];if(current.warned&&!previous.warned){assert.equal(current.lastSetback,5);assert(current.quality<previous.quality-4,'suspicion warning moves progress backwards');warningLoss=true;}if(current.caught>previous.caught){assert.equal(current.lastSetback,12);assert(current.quality<previous.quality-11,'caught rolls back existing progress, not only new data');caughtLoss=true;}previous=current;}
+assert(warningLoss,'70% warning applies a setback');assert(caughtLoss,'100% detection applies the bigger setback');
+browser=await chromium.launch(browserOptions);const adminContext=await browser.newContext();const page=await adminContext.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(adminUrl);await page.locator('#connection').filter({hasText:'LIVE'}).waitFor();
+await page.locator('#pause').click();await page.waitForFunction(()=>document.getElementById('aya-stage').dataset.mood==='sleeping');
+await page.locator('#mood').selectOption('angry');await page.waitForFunction(()=>document.getElementById('aya-stage').dataset.mood==='angry');
+await page.locator('#reset').click();
+const playerContext=await browser.newContext();const player=await playerContext.newPage();player.on('pageerror',e=>errors.push(e.message));await player.goto(url+'/player');await player.locator('#nickname').fill('Sara');await player.locator('#join-form button').click();await player.locator('#my-name').filter({hasText:'Sara'}).waitFor();assert.equal(await player.locator('#next').count(),0);assert.equal(await player.locator('#level').count(),0);
+assert(!(await player.locator('#spacing-control').isVisible()));assert(!(await player.locator('#variety-control').isVisible()));assert(!(await player.locator('#verification-control').isVisible()));
+await player.locator('#speed').focus();await player.locator('#speed').press('Home');await wait(200);const slowRate=parseFloat(await player.locator('#rate-value').textContent());
+await player.locator('#speed').press('End');await wait(200);const fastRate=parseFloat(await player.locator('#rate-value').textContent());assert(fastRate>slowRate,'live rate reflects faster tuning');assert((await player.locator('#rate-change').textContent()).includes('Faster'));
+await player.locator('#extract').click();await page.locator('#start').click();await player.waitForFunction(()=>document.getElementById('answers').textContent!=='0 answers saved');
+assert.equal(await player.locator('#rate-label').textContent(),'Copy speed');
+assert.equal((await post('/api/join',{name:'Late',room:'MIRROR'})).status,409,'enrolment closes during running');
+await page.locator('#next').click();await player.locator('#challenge-panel').waitFor({state:'visible'});await player.locator('#aya-upgrade').waitFor({state:'visible'});
+assert((await player.locator('#aya-version').textContent()).includes('v2.0'));assert((await player.locator('#aya-upgrade-name').textContent()).includes('Rate limit'));assert(await player.locator('#extract').isDisabled());assert.equal(await player.locator('#rate-value').textContent(),'+0.00% / sec');
+await player.locator('[data-answer="0"]').click();await player.locator('.quiz-feedback.wrong').waitFor();assert((await player.locator('#points').textContent()).includes('-5'));
+await wait(2100);await player.locator('[data-answer="1"]').click();await player.locator('#spacing-control').waitFor({state:'visible'});assert((await player.locator('#points').textContent()).includes('5 pts'));
+assert(await player.locator('#extract').isDisabled());assert(await player.locator('#spacing-control').evaluate(e=>e.classList.contains('unlock-highlight')));await player.locator('#spacing').focus();await player.locator('#spacing').press('End');await player.locator('#confirm-tune').click();await player.waitForFunction(()=>!document.getElementById('extract').disabled);assert.equal(await player.locator('#extract').textContent(),'Resume stealing');assert(await player.locator('#extract').evaluate(e=>e.classList.contains('resume-highlight')));
+await page.locator('#next').click();await player.locator('[data-answer="2"]').click();await player.locator('#variety-control').waitFor({state:'visible'});await player.locator('#confirm-tune').click();await player.waitForFunction(()=>!document.getElementById('extract').disabled);
+await page.locator('#next').click();await player.locator('[data-answer="0"]').click();await player.locator('#verification-control').waitFor({state:'visible'});await player.locator('#confirm-tune').click();await player.waitForFunction(()=>!document.getElementById('extract').disabled);
+assert.equal(await player.locator('#points').textContent(),'25 pts');
+for(const target of [page,player])for(const width of [1280,736,360,320]){await target.setViewportSize({width,height:1100});await wait(100);const overflow=await target.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth);assert(!overflow,'no overflow at '+width);}
+await page.locator('#finish').click();await player.locator('#results').waitFor({state:'visible'});assert.equal(await player.locator('.test').count(),3);assert.deepEqual(errors,[]);
+console.log('PASS: new-level extraction gate, no detection/requests before answering even when host starts, manual resume after correct answer, visible Aya rebirth/version announcement, individual unlocks, penalties and cooldowns, live rates, role permissions, mobile layouts, final results.');
+}finally{streamController.abort();await browser?.close();child.kill();}

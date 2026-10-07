@@ -1,0 +1,14 @@
+# Include this location configuration in your HTTPS server block.
+# Your infrastructure must supply the real server_name and TLS certificate.
+# Do not expose port 4173 publicly when using this proxy.
+location / {
+    proxy_pass http://127.0.0.1:4173;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_buffering off;
+    proxy_cache off;
+    proxy_read_timeout 3600s;
+    proxy_send_timeout 3600s;
+    client_max_body_size 16k;
+}

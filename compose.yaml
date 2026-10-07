@@ -1,0 +1,30 @@
+services:
+  game:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:4173:4173"
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 4173
+      DATA_DIR: /app/data
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:?Set your HTTPS origin in .env}
+      MIRROR_ADMIN_TOKEN: ${MIRROR_ADMIN_TOKEN:?Set a random host secret in .env}
+      ROOM_CODE: ${ROOM_CODE:-MIRROR}
+      ROUND_SECONDS: ${ROUND_SECONDS:-180}
+      MAX_PLAYERS: ${MAX_PLAYERS:-100}
+      REQUIRE_INVITES: "true"
+      ALLOW_DEMO_BOTS: "false"
+    volumes:
+      - game-data:/app/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    stop_grace_period: 10s
+volumes:
+  game-data:
